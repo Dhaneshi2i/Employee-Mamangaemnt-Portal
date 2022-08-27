@@ -46,24 +46,13 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
     @Override
     public void insertEmployee(T employee) {    
 
-	if (employee instanceof Trainee) {
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-                session.save(employee);
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-
-	} else {
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction(); 
-                session.save(employee);
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace(); 
-            }
-	}
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(employee);
+            transaction.commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -75,7 +64,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();
 	        Criteria criteria = session.createCriteria(Trainee.class);
-	        criteria.add(Restrictions.ne("deleted", false));
+	        criteria.add(Restrictions.eq("deleted", false));
                 trainees = criteria.list();
                 transaction.commit();
             } catch (HibernateException e) {
@@ -88,7 +77,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();
 	        Criteria criteria = session.createCriteria(Trainer.class);
-	        criteria.add(Restrictions.ne("deleted", false));
+	        criteria.add(Restrictions.eq("deleted", false));
                 trainers = criteria.list();
                 transaction.commit();
             } catch (HibernateException e) {
@@ -99,7 +88,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
     }
 
     @Override
-    public T retriveEmployeeById(String id) {
+    public T retriveEmployeeById(int id) {
 
 	if (value instanceof Trainee) {
 
@@ -133,89 +122,46 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
     }
 
     @Override
-    public String removeEmployeeById(String id) {
+    public String removeEmployeeById(Employee employee) {
 
-	if (value instanceof Trainee) {
-
-            String message = "Didn't delete the trainee";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-
-                Trainee trainee = (Trainee) session.get(Trainee.class, id);
-                trainee.setDeleted(true);
-                session.update(trainee);
-                transaction.commit();
-                message = "Trainee deleted";               
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-            return message;
-	    
-	} else {
-
-            String message = "Didn't delete the trainer";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();	
-
-                Trainer trainer = (Trainer) session.get(Trainer.class, id);
-                trainer.setDeleted(true);
-                session.update(trainer);
-                transaction.commit();
-                message = "Trainee deleted";
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-	    return message;
-	}
+        String deletionMessage = "Didn't delete the Employee";
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.update(employee);
+            transaction.commit();
+            deletionMessage = "Employee deleted";               
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return deletionMessage;
     }
 
     @Override
-    public String updateEmployeeById(String id, Long contactNumber) {
+    public String updateEmployeeById(Employee employee) {
 
-	if (value instanceof Trainee) {
-	    
-            String message = "Trainee details not updated";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();	
+        String updationMessage = "Trainee details not updated";
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();   
+            session.update(employee);
+            transaction.commit();
+            updationMessage  = "Trainee details successfully updated";
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return updationMessage; 
+    }  
+}
 
-                Trainee trainee = (Trainee) session.get(Trainee.class, id);
-                trainee.setContactNumber(contactNumber);
-                session.update(trainee);
-                transaction.commit();
-                message  = "Trainer details successfully updated";
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-            return message;
-	    
-	} else {
-
-            String message = "Trainer details not updated";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();	
-
-                Trainer trainer = (Trainer) session.get(Trainer.class, id);
-                trainer.setContactNumber(contactNumber);
-                session.update(trainer);
-                transaction.commit();
-                message  = "Trainer details successfully updated";
-            } catch(HibernateException e) {  
-                e.printStackTrace();
-            }
-            return message;
-	}
-    }   
-
-    @Override
-    public String employeeAssociation(String employeeId, List<T> employeesId) {
+    /*@Override
+    public String employeeAssociation(int employeeId, List<T> employeesId) {
 
 	if (value instanceof Trainee) {
 	
             String message = "Associated failed";
             try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();	
-                Criteria criteria = session.createcriteria(Trainee.Class);
-                criteria.add(Restrictions.ne("deleted", true));
+                Criteria criteria = session.createCriteria(Trainee.class);
+                criteria.add(Restrictions.eq("deleted", false));
                 List<Trainee> trainees = criteria.list();
                 for (Trainee trainee : trainees) {
                     if (trainee.getId().equals(employeeId)) {
@@ -235,7 +181,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();
                 Criteria criteria = session.createCriteria(Trainer.class);
-                criteria.add(Restrictions.ne("deleted", true));
+                criteria.add(Restrictions.eq("deleted", false));
                 List<Trainer> trainers = criteria.list();
                 for (Trainer trainer : trainers) {
                     if (trainer.getId().equals(employeeId)) {
@@ -249,17 +195,17 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             }
             return message;         
 	} 
-    }   
+    }*/   
 
-    @Override
-    public List<Employee> retrieveAndDisplayAssociatedEmployee(String id) {
+    /*@Override
+    public List<Employee> retrieveAndDisplayAssociatedEmployee(int id) {
 
 	if (value instanceof Trainee) {
             List<Employee> employees = new ArrayList<>();
 	    try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();
                 Criteria criteria = session.createCriteria(Trainee.class);
-                criteria.add(Restrictions.ne("deleted", false));
+                criteria.add(Restrictions.eq("deleted", false));
                 List<Trainee> trainees = criteria.list();
                 for (Trainee trainee : trainees) {
                     if (trainee.getId().equals(id)) {
@@ -281,7 +227,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
 	    try (Session session = HibernateUtility.getSession()) {
                 Transaction transaction = session.beginTransaction();
                 Criteria criteria = session.createCriteria(Trainer.class);
-                criteria.add(Restrictions.ne("deleted",false));
+                criteria.add(Restrictions.eq("deleted", false));
                 List<Trainer> trainers = criteria.list();
                 for (Trainer trainer : trainers) {
                     if (trainer.getId().equals(id)) {
@@ -297,5 +243,4 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             }
             return (List<Employee>) employees;
 	}
-    }
-}
+    }*/

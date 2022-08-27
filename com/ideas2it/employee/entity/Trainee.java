@@ -16,12 +16,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "Trainees")
+@Table (name = "trainees")
 public class Trainee extends Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainee_seq")
-    @SequenceGenerator(name = "trainee_seq",sequenceName = "trainee_sequence")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="trainee_seq")
     private int traineeId;
 
     @Column(name ="Reporting_person_name")
@@ -47,6 +46,14 @@ public class Trainee extends Employee {
 
     public String getReportingPersonName() {
 	return reportingPersonName;
+    }
+
+    public void setTraineeId(int traineeId) {
+        this.traineeId = traineeId;
+    }
+
+    public int getTraineeId() {
+        return traineeId;
     }
 
 }

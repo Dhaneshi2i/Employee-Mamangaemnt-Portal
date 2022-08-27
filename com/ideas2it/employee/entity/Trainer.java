@@ -2,6 +2,7 @@ package com.ideas2it.employee.entity;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,13 +16,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "trainers")
 public class Trainer extends Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainer_seq")
-    @SequenceGenerator(name = "trainer_seq",sequenceName = "trainer_sequence")
+    @GeneratedValue( strategy=GenerationType.SEQUENCE, generator="trainee_seq")
     private int trainerId;
 
     @Column(name = "Projects_worked")
@@ -45,5 +46,13 @@ public class Trainer extends Employee {
     public byte getProjectsWorked() {
 	return projectsWorked;
     } 
+
+    public void setTrainerId(int trainerId) {
+        this.trainerId = trainerId;
+    }
+
+    public int getTrainerId() {
+        return trainerId;
+    }
 
 }

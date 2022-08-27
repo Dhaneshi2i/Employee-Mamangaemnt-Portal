@@ -13,15 +13,15 @@ public interface IEmployeeService <T extends EmployeeDto> {
 
     public List<T> getAllEmployees();
 
-    public T getEmployeeById(String id);
+    public T getEmployeeById(int id);
 
-    public String deleteEmployeeById(String id);
+    public String deleteEmployeeById(int id);
 
-    public String updateEmployeeById(String id, Long contactNumber);
+    public String updateEmployeeById(int id, Long contactNumber);
 
-    public String association(String employeeId, List<T> employeesId);
+    //public String association(int employeeId, List<T> employeesId);
 
-    public List<EmployeeDto> getAssociatedEmployeeDetails(String id);
+    //public List<EmployeeDto> getAssociatedEmployeeDetails(String id);
 
 }
 

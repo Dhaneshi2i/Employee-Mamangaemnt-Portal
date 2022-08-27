@@ -7,6 +7,7 @@ import com.ideas2it.employee.dao.impl.EmployeeDaoImpl;
 import com.ideas2it.employee.dto.EmployeeDto;
 import com.ideas2it.employee.dto.TraineeDto;
 import com.ideas2it.employee.dto.TrainerDto;
+import com.ideas2it.employee.entity.Employee;
 import com.ideas2it.employee.entity.Trainee;
 import com.ideas2it.employee.entity.Trainer;
 import com.ideas2it.employee.util.Converter;
@@ -44,7 +45,7 @@ public class EmployeeServiceImpl<T extends EmployeeDto> implements IEmployeeServ
     }
 
     @Override
-    public T getEmployeeById(String id) {
+    public T getEmployeeById(int id) {
 	if (value instanceof TraineeDto) {
 	    return (T)Converter.convertTraineeToTraineeDto(traineeEmployeeDao.retriveEmployeeById(id));
 	} else {
@@ -53,29 +54,55 @@ public class EmployeeServiceImpl<T extends EmployeeDto> implements IEmployeeServ
     }
 
     @Override
-    public String deleteEmployeeById(String id) {
+    public String deleteEmployeeById(int id) {
+        Employee employee = new Employee();
 	if (value instanceof TraineeDto) {
-	    return traineeEmployeeDao.removeEmployeeById(id);
+            for (Trainee trainee : traineeEmployeeDao.retriveAllEmployees()) {
+                if (trainee.getTraineeId() == (id)) {
+                    trainee.setDeleted(true);
+                    employee = trainee;
+                }
+            }
+	    return traineeEmployeeDao.removeEmployeeById((Trainee)employee);
 	} else {
-	    return trainerEmployeeDao.removeEmployeeById(id);
+            for (Trainer trainer : trainerEmployeeDao.retriveAllEmployees()) {
+                if (trainer.getTrainerId() == (id)) {
+                    trainer.setDeleted(true);
+                    employee = trainer;
+                }
+            }
+	    return trainerEmployeeDao.removeEmployeeById((Trainer)employee);
 	}
     }
 
     @Override
-    public String updateEmployeeById(String id, Long contactNumber) {
+    public String updateEmployeeById(int id, Long contactNumber) {
+        Employee employee = new Employee();
 	if (value instanceof TraineeDto) {
-	    return traineeEmployeeDao.updateEmployeeById(id, contactNumber);
+            for (Trainee trainee : traineeEmployeeDao.retriveAllEmployees()) {
+                if (trainee.getTraineeId() == (id)) {
+                    trainee.setContactNumber(contactNumber);
+                    employee = trainee;
+                }
+            }
+            return traineeEmployeeDao.updateEmployeeById((Trainee)employee);
 	} else {
-	    return trainerEmployeeDao.updateEmployeeById(id, contactNumber);
+            for (Trainer trainer : trainerEmployeeDao.retriveAllEmployees()) {
+                if (trainer.getTrainerId() == (id)) {
+                    trainer.setContactNumber(contactNumber);
+                    employee = trainer;
+                }
+            }
+            return traineeEmployeeDao.updateEmployeeById((Trainer)employee);
 	}
     }
 	
-    @Override
-    public String association(String employeeId, List<T> employeesId) {
+    /*@Override
+    public String association(int employeeId, List<T> employeesId) {
 	if (value instanceof TraineeDto) {
-	    return traineeEmployeeDao.employeeAssociation(employeeId, (convertTrainerDtoListToTrainerList((List<TrainerDto>)employeesId);
+	    return trainerEmployeeDao.employeeAssociation(employeeId, (Converter.convertTrainerDtoListToTrainerList((List<TrainerDto>) employeesId)));
 	} else { 
-	    return trainerEmployeeDao.employeeAssociation(employeeId, (convertTraineeDtoListToTraineeList((List<TraineeDto>)employeesId);
+	    return traineeEmployeeDao.employeeAssociation(employeeId, (Converter.convertTraineeDtoListToTraineeList((List<TraineeDto>) employeesId)));
 	}
     }
 
@@ -86,7 +113,7 @@ public class EmployeeServiceImpl<T extends EmployeeDto> implements IEmployeeServ
 	} else {
 	    return Converter.convertEmployeeListToEmployeeDtoList(trainerEmployeeDao.retrieveAndDisplayAssociatedEmployee(id));
 	}
-    }
+    }*/
 }
     
 
