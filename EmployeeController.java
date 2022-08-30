@@ -1,3 +1,8 @@
+/*
+ * <p>
+ *   Copyright (c) All rights reserved
+ * </p>
+ */
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
@@ -15,6 +20,18 @@ import com.ideas2it.employee.service.IEmployeeService;
 import com.ideas2it.employee.service.impl.EmployeeServiceImpl;
 import com.ideas2it.employee.util.EmployeeUtil;                         
 
+/**
+ * <p>
+ *   Implemented to create a new employee or search, update, and delete
+ *   existing employee 
+ * </p>
+ *
+ * <p>  
+ *   This file is created on 27/07/2022
+ *   @author : Dhanesh Kumar
+ * </p>
+ */
+
 public class EmployeeController {
 
     private Scanner scanner = new Scanner(System.in); 
@@ -28,6 +45,11 @@ public class EmployeeController {
 	controller.init();
     }
 	
+    /**
+     * <p>
+     *   Shows the list of options for employee manipulation
+     * </p>
+     */
     public void init() {
 
 	String validate;
@@ -97,13 +119,13 @@ public class EmployeeController {
 		switch (userChoiceForDisplay) {
 		case 1:
                     logger.info("Enter Trainee Id: ");
-		    int traineeId = scanner.nextInt();
+		    String traineeId = scanner.next();
 		    displayTraineeById(traineeId);
 		    break;
 
                 case 2:
                     logger.info("Enter Trainer Id: " + "\n");
-		    int trainerId = scanner.nextInt();
+		    String trainerId = scanner.next();
 		    displayTrainerById(trainerId);
 		    break;	
 		}
@@ -137,13 +159,13 @@ public class EmployeeController {
 		switch (userChoiceForRemove) {
 		case 1:
 		    logger.info("Enter trainee id: ");
-		    int traineeId = scanner.nextInt();
+		    String traineeId = scanner.next();
 		    logger.info(traineeDtoService.deleteEmployeeById(traineeId));
 		    break; 
 		    
 		case 2: 
                     logger.info("Enter trainer id: ");
-		    int trainerId = scanner.nextInt();
+		    String trainerId = scanner.next();
 		    logger.info(trainerDtoService.deleteEmployeeById(trainerId));
 		    break;
 		}
@@ -154,11 +176,11 @@ public class EmployeeController {
 		int userChoiceForAssociate = scanner.nextInt();
 		switch (userChoiceForAssociate) {
 		case 1:
-                    //addAssociates(1);
+                    addAssociates(1);
 		    break;
 
 		case 2:
-		    //addAssociates(2);
+		    addAssociates(2);
 		    break;
 		}
 		break;
@@ -171,6 +193,12 @@ public class EmployeeController {
 
     }   
 
+    /**
+     * <p>
+     *   Get the required employee details to create an employee
+     * </p>
+     *
+     */
     public void createEmployee(int userInput) { 
 	DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	logger.info("Enter your Name: ");
@@ -198,14 +226,14 @@ public class EmployeeController {
  	    scanner.nextLine();
 	    TraineeDto traineeDto = new TraineeDto();
             logger.info("Enter your reporting person name: ");
-            String trainerName = scanner.nextLine();
+            String reportingPersonName = scanner.nextLine();
 	   	
 	    traineeDto.setName(name);
 	    traineeDto.setId(id);
  	    traineeDto.setContactNumber(contactNumber);
 	    traineeDto.setDateOfBirth(dateOfBirth);
 	    traineeDto.setDateOfJoining(dateOfJoining);
-	    traineeDto.setReportingPersonName(trainerName);
+	    traineeDto.setReportingPersonName(reportingPersonName);
 	    traineeDtoService.createEmployee(traineeDto);
 
 	} else if (userInput == 2) {
@@ -213,12 +241,6 @@ public class EmployeeController {
 	    TrainerDto trainerDto = new TrainerDto();
 	    logger.info("Enter your Projects Worked: ");
             byte projectsWorked = scanner.nextByte();
-            displayAllTrainee();
-            /*logger.info("Do you want to associate any of the above trainees: yes or no");
-            usersChoice = scanner.next();
-            while (usersChoice.equalsIgnoreCase()) {
-                logger.info("Enter the trainee id's");
-                String[] traineeIds = scanner.next().spilt(",");*/
                 
 	    trainerDto.setName(name);	
 	    trainerDto.setId(id);
@@ -228,7 +250,6 @@ public class EmployeeController {
 	    trainerDto.setProjectsWorked(projectsWorked);
 	    trainerDtoService.createEmployee(trainerDto);
 	}
-
     }
 
     public void displayAllTrainee() {
@@ -243,52 +264,57 @@ public class EmployeeController {
 	}
     }
 
-    public void displayTraineeById(int Id) { 
-	TraineeDto traineeDto = traineeDtoService.getEmployeeById(Id);
+    public void displayTraineeById(String id) { 
+	TraineeDto traineeDto = traineeDtoService.getEmployeeById(id);
         logger.info(traineeDto.toString());	
     }
 
-    public void displayTrainerById(int Id) {
-	TrainerDto trainerDto = trainerDtoService.getEmployeeById(Id);
+    public void displayTrainerById(String id) {
+	TrainerDto trainerDto = trainerDtoService.getEmployeeById(id);
 	logger.info(trainerDto.toString());	
     }
 
-    /*public void addAssociates(int userInput) {
+    public void addAssociates(int userInput) {
 	if (userInput == 1) {
+            scanner.nextLine();
             displayAllTrainee();
 	    logger.info("Enter the trainee id: ");
-	    int traineeId = scanner.nextInt();
+	    String traineeId = scanner.nextLine();
+            
             displayAllTrainer();
             logger.info("Enter the trainer's id's you want to add: ");
-	    int[] trainersIds = scanner.nextInt().split(",");
+	    String[] trainersIds = scanner.next().split(",");
+            System.out.println("length : "+ trainersIds.length);
             List<TrainerDto> trainersDto = new ArrayList<>();
-            System.out.println("length: "+trainersIds.length);
             for (int i = 0; i<trainersIds.length;i++) {
                 TrainerDto trainerDto = trainerDtoService.getEmployeeById(trainersIds[i]);
                 trainersDto.add(trainerDto);
             } 
-            logger.info(trainerDtoService.association(traineeId,trainersDto));
+            trainerDtoService.association(traineeId, trainersDto);
      
 	} else if (userInput == 2) {   
+            scanner.nextLine();
             displayAllTrainer();
 	    logger.info("Enter the trainer id: ");
-	    String trainerId = scanner.nextInt();
+	    String trainerId = scanner.next();
+            
             displayAllTrainee();
 	    logger.info("Enter the trainee's id's you want to add: ");
-	    int[] traineesIds = scanner.nextInt().split(",");
+	    String[] traineesIds = scanner.next().split(",");
+
             List<TraineeDto> traineesDto = new ArrayList<>();
             for (int i = 0;i < traineesIds.length;i++) { 
                 TraineeDto traineeDto = traineeDtoService.getEmployeeById(traineesIds[i]);
                 traineesDto.add(traineeDto);
             }
-            logger.info(traineeDtoService.association(trainerId, traineesDto));
+            traineeDtoService.association(trainerId, traineesDto);
 	}	    
     }
 
     public void displayAssociatedEmployeeDetails(int userInput) {
 	if (userInput == 1) {
 	    logger.info("Enter the trainee id: ");
-	    int traineeId = scanner.nextInt();
+	    String traineeId = scanner.next();
 	    boolean flag = true;
 	    for ( EmployeeDto employeeDto : traineeDtoService.getAssociatedEmployeeDetails(traineeId)) {
 		if (employeeDto instanceof TraineeDto && flag == true) {
@@ -301,7 +327,7 @@ public class EmployeeController {
 	    }
 	} else if (userInput == 2) {
 	    logger.info("Enter the trainer id: ");
-	    int trainerId = scanner.nextInt();
+	    String trainerId = scanner.next();
 	    boolean flag = true;
 	    for ( EmployeeDto employeeDto : trainerDtoService.getAssociatedEmployeeDetails(trainerId)) {
 		if (employeeDto instanceof TrainerDto && flag == true) {
@@ -313,11 +339,11 @@ public class EmployeeController {
 		}
 	    }
 	}
-    }*/
+    }
 	 
     public void updateEmployeeById(int userInput) throws EmployeeRunTimeException {
 	logger.info("Enter Employee id: ");
-        int id = scanner.nextInt();	
+        String id = scanner.next();	
 	if (userInput == 1) {
 	    if (traineeDtoService.getEmployeeById(id) == null) {
 		throw new EmployeeRunTimeException("Id does not exist");

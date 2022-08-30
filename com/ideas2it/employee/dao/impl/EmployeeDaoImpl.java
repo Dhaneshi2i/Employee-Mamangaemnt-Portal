@@ -6,17 +6,11 @@
 
 package com.ideas2it.employee.dao.impl;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -35,6 +29,17 @@ import com.ideas2it.employee.entity.Trainee;
 import com.ideas2it.employee.entity.Trainer;
 import com.ideas2it.employee.util.HibernateUtility;
 
+/**
+ * <p>
+ *   Implementation to save a new employee and to search, update, and delete
+ *   existing employee details to the database
+ * </p>
+ *
+ * <p>  
+ *   This file is created on 27/07/2022
+ *   @author : Dhanesh kumar
+ * </p>
+ */
 public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {   
 
     private T value;
@@ -43,169 +48,208 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
 	this.value = value;
     }
 
+    private static Logger logger = LoggerFactory.getLogger(EmployeeDaoImpl.class);
+
+    /**
+     * <p>
+     *   Insert an employee to the list  
+     * </p>
+     *
+     * @param employee {@link T} the employee object 
+     * 
+     * @return {@link void}
+     */
     @Override
     public void insertEmployee(T employee) {    
 
         try (Session session = HibernateUtility.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(employee);
+            if (employee instanceof Trainee) {
+                session.save(employee);
+            } else {
+                session.save(employee);
+            }
             transaction.commit();
         } catch (HibernateException e) {
-            e.printStackTrace();
+            logger.error("",e);
         }
     }
 
+    /**
+     * <p>
+     *   Retrieve list of all employees
+     * </p>
+     *
+     * @return {@link List} of {@link T}
+     */
     @Override
     public List<T> retriveAllEmployees() {     
 
-	if ( value instanceof Trainee) {
-
-            List<Trainee> trainees = new ArrayList<>();
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
+        List<Employee> employees = new ArrayList<>();
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            if ( value instanceof Trainee) {
 	        Criteria criteria = session.createCriteria(Trainee.class);
-	        criteria.add(Restrictions.eq("deleted", false));
-                trainees = criteria.list();
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            } 
-            return (List<T>)trainees;
-                
-	} else {
-            List<Trainer> trainers = new ArrayList<>();
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-	        Criteria criteria = session.createCriteria(Trainer.class);
-	        criteria.add(Restrictions.eq("deleted", false));
-                trainers = criteria.list();
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace();
+	        criteria.add(Restrictions.eq("isActiveEmployee", false));
+                employees = criteria.list();
+            } else {
+                Criteria criteria = session.createCriteria(Trainer.class);
+	        criteria.add(Restrictions.eq("isActiveEmployee", false));
+                employees = criteria.list();
             }
-            return (List<T>)trainers;
-	}
+            transaction.commit();
+        } catch (HibernateException e) {
+            logger.error("",e);
+        } 
+        return (List<T>)employees;                
     }
 
+    /**
+     * <p>
+     *   Retrive employee with his id
+     * </p>
+     * 
+     * @param id {@link String} id of employee 
+     * 
+     * @return {@link T} the employee object
+     * 
+     */
     @Override
-    public T retriveEmployeeById(int id) {
+    public T retriveEmployeeById(String id) {
+            
+        Employee employee = null;
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();
 
-	if (value instanceof Trainee) {
-
-            Trainee selectedTrainee = null;
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-
-                Trainee trainee = (Trainee) session.get(Trainee.class, id);	
-                selectedTrainee = trainee;
-                session.update(selectedTrainee);
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace();
-	    }
-	    return (T)selectedTrainee;
-	} else {
-
-            Trainer selectedTrainer = null;
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-
-                Trainer trainer = (Trainer) session.get(Trainer.class, id);	
-                selectedTrainer = trainer;
-                session.update(selectedTrainer);
-                transaction.commit();
-            } catch (HibernateException e) {
-                e.printStackTrace();
-	    }
-	    return (T)selectedTrainer;
+            if (value instanceof Trainee) {
+                Criteria criteria = session.createCriteria(Trainee.class);
+	        criteria.add(Restrictions.eq("id", id));
+                criteria.add(Restrictions.eq("isActiveEmployee",false));
+                List<Trainee> trainees = criteria.list();
+                for (Trainee trainee : trainees) {
+                    if (trainee.getId().equals(id)) {
+                        employee = trainee;
+                        break;
+                    }
+                }
+            } else {
+                Criteria criteria = session.createCriteria(Trainer.class);
+	        criteria.add(Restrictions.eq("id", id));
+                criteria.add(Restrictions.eq("isActiveEmployee",false));
+                List<Trainer> trainers = criteria.list();
+                for (Trainer trainer : trainers) {
+                    if (trainer.getId().equals(id)) {
+                        employee = trainer;
+                        break;
+                    }
+                }
+            }
+            transaction.commit();
+        } catch (HibernateException e) {
+            logger.error("",e);
 	}
+	return (T)employee;
     }
 
+    /**
+     * <p>
+     *   Delete employee with his id
+     * </p>
+     * 
+     * @param Id {@link int} id of employee
+     * 
+     * @return {@link String} deletion message 
+     * 
+     */
     @Override
     public String removeEmployeeById(Employee employee) {
 
         String deletionMessage = "Didn't delete the Employee";
         try (Session session = HibernateUtility.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.update(employee);
+            if (employee instanceof Trainee) {
+                session.update(employee);
+            } else {
+                session.update(employee);
+            }
             transaction.commit();
             deletionMessage = "Employee deleted";               
         } catch (HibernateException e) {
-            e.printStackTrace();
+            logger.error("",e);
         }
         return deletionMessage;
     }
 
+    /**
+     * <p>
+     *   update employee with his id
+     * </p>
+     * 
+     * @param Employee {@link employee} the employee object
+     * 
+     * @return {@link String} updation message 
+     * 
+     */
     @Override
-    public String updateEmployeeById(Employee employee) {
+    public String updateEmployee(Employee employee) {
 
-        String updationMessage = "Trainee details not updated";
+        String updationMessage = "Employee details not updated";
         try (Session session = HibernateUtility.getSession()) {
-            Transaction transaction = session.beginTransaction();   
-            session.update(employee);
+            Transaction transaction = session.beginTransaction(); 
+
+            if (employee instanceof Trainee) { 
+                session.update((Trainee)employee);
+            } else {
+                session.update((Trainer)employee);
+            }
             transaction.commit();
-            updationMessage  = "Trainee details successfully updated";
+            updationMessage  = "Employee details successfully updated";
         } catch (HibernateException e) {
-            e.printStackTrace();
+            logger.error("",e);
         }
         return updationMessage; 
     }  
-}
 
-    /*@Override
-    public String employeeAssociation(int employeeId, List<T> employeesId) {
+    @Override
+    public void updateEmployeeAssociation(Employee employee) {
 
-	if (value instanceof Trainee) {
+        //String updationMessage = "Employee details not updated";
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction(); 
+
+            if (employee instanceof Trainee) { 
+                session.update((Trainee)employee);
+            } else {
+                session.update((Trainer)employee);
+            }
+            transaction.commit();
+            //updationMessage  = "Employee details successfully updated";
+        } catch (HibernateException e) {
+            logger.error("",e);
+        }
+        //return updationMessage; 
+    }
+
+    /**
+     * <p>
+     *   retrive associated employee details
+     * </p>
+     * 
+     * @param id {@link String} id of employee
+     * 
+     * @return {@link List} of {@Link employee}
+     * 
+     */
+    @Override
+    public List<Employee> retrieveAndDisplayAssociatedEmployee(String id) {
+
 	
-            String message = "Associated failed";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();	
+        List<Employee> employees = new ArrayList<>();
+        try (Session session = HibernateUtility.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            if (value instanceof Trainee) {
                 Criteria criteria = session.createCriteria(Trainee.class);
-                criteria.add(Restrictions.eq("deleted", false));
-                List<Trainee> trainees = criteria.list();
-                for (Trainee trainee : trainees) {
-                    if (trainee.getId().equals(employeeId)) {
-                        trainee.setTrainer((List<Trainer>) employeesId);
-                    }
-                }
-                transaction.commit();
-                message = "Trainers to trainee successfully associated";
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-            return message;
-
-	} else {
-
-            String message = "Associated failed";
-            try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-                Criteria criteria = session.createCriteria(Trainer.class);
-                criteria.add(Restrictions.eq("deleted", false));
-                List<Trainer> trainers = criteria.list();
-                for (Trainer trainer : trainers) {
-                    if (trainer.getId().equals(employeeId)) {
-                        trainer.setTrainee((List<Trainee>) employeesId);
-                    }
-                }	
-                transaction.commit();
-                message = "Trainees to trainer successfully associated";
-            } catch (HibernateException e ) {
-                e.printStackTrace();
-            }
-            return message;         
-	} 
-    }*/   
-
-    /*@Override
-    public List<Employee> retrieveAndDisplayAssociatedEmployee(int id) {
-
-	if (value instanceof Trainee) {
-            List<Employee> employees = new ArrayList<>();
-	    try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
-                Criteria criteria = session.createCriteria(Trainee.class);
-                criteria.add(Restrictions.eq("deleted", false));
+                criteria.add(Restrictions.eq("isActiveEmployee", false));
                 List<Trainee> trainees = criteria.list();
                 for (Trainee trainee : trainees) {
                     if (trainee.getId().equals(id)) {
@@ -215,19 +259,9 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
                         }
                     }   
 	        }
-                transaction.commit();
-	    } catch (HibernateException e ) {
-		e.printStackTrace();
-	    }
-	    return (List<Employee>) employees;
-
-	} else {
-
-            List<Employee> employees = new ArrayList<>();
-	    try (Session session = HibernateUtility.getSession()) {
-                Transaction transaction = session.beginTransaction();
+           } else {
                 Criteria criteria = session.createCriteria(Trainer.class);
-                criteria.add(Restrictions.eq("deleted", false));
+                criteria.add(Restrictions.eq("isActiveEmployee", false));
                 List<Trainer> trainers = criteria.list();
                 for (Trainer trainer : trainers) {
                     if (trainer.getId().equals(id)) {
@@ -237,10 +271,11 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
                         }
                     }   
 	        }
-                transaction.commit();
-	    } catch (HibernateException e ) {
-		e.printStackTrace();
             }
-            return (List<Employee>) employees;
+            transaction.commit();
+        } catch (HibernateException e ) {
+	    logger.error("",e);
 	}
-    }*/
+        return (List<Employee>) employees;
+    }
+}

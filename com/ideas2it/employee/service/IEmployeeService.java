@@ -1,3 +1,9 @@
+/*
+ * <p>
+ *   Copyright (c) All rights reserved
+ * </p>
+ */
+
 package com.ideas2it.employee.service;
 
 import com.ideas2it.employee.dao.IEmployeeDao;
@@ -9,20 +15,91 @@ import java.util.List;
 
 public interface IEmployeeService <T extends EmployeeDto> {
 
+    /**
+     * <p>
+     *   used to add Employee into List
+     * </p>
+     * 
+     * @param employee {@link T} the employee object 
+     * 
+     * @return {@link void}
+     * 
+     */
     public void createEmployee(T t);
 
+    /**
+     * <p>
+     *   Returns list of all employees
+     * </p>
+     * 
+     * @return {@link List} of {@link T}
+     * 
+     */
     public List<T> getAllEmployees();
 
-    public T getEmployeeById(int id);
+    /**
+     * <p>
+     *   used to get employee by his id
+     * </p>
+     * 
+     * @param employeeId {@link String} id of employee 
+     * 
+     * @return {@link T} the employee object
+     * 
+     */
+    public T getEmployeeById(String id);
 
-    public String deleteEmployeeById(int id);
+    /**
+     * <p>
+     *   used to remove the Employee by his id
+     * </p>
+     * 
+     * @param employeeId {@link String} id of employee 
+     * 
+     * @return {@link String} deletion message
+     * 
+     */
+    public String deleteEmployeeById(String id);
 
-    public String updateEmployeeById(int id, Long contactNumber);
+    /**
+     * <p>
+     *   used to update the Employee by his id
+     * </p>
+     * 
+     * @param id {@link String} id of employee 
+     *
+     * @param mobileNumber{@link long} mobile number of employee
+     * 
+     * @return {@link String} the updation message
+     * 
+     */
+    public String updateEmployeeById(String id, Long contactNumber);
 
-    //public String association(int employeeId, List<T> employeesId);
+    /**
+     * <p>
+     *   used to associate the employees by their id
+     * </p>
+     * 
+     * @param employees {@link List} of {@link T} list of employees 
+     * 
+     * @param employeeId {@link String} id of employee
+     *
+     * @return {@link String} the updation message
+     * 
+     */
+    public void association(String employeeId, List<T> employeesDto);
 
-    //public List<EmployeeDto> getAssociatedEmployeeDetails(String id);
-
+    /**
+     * <p>
+     *   used to get associated employees with id
+     * </p>
+     * 
+     * @param id {@link String} id of employee 
+     * 
+     * @return {@link List} of {@link EmployeeDto}
+     * 
+     */
+    public List<EmployeeDto> getAssociatedEmployeeDetails(String id);
 }
 
 

@@ -4,8 +4,17 @@ import java.util.List;
 
 public class TrainerDto extends EmployeeDto {
 
+    private int trainerId;
     private byte projectsWorked;
     private List<TraineeDto> trainees;
+
+    public void setTrainerId(int trainerId) {
+        this.trainerId = trainerId;
+    }
+
+    public int getTrainerId() {
+        return trainerId;
+    }
 
     public void setProjectsWorked(byte projectsWorked) {
 	this.projectsWorked = projectsWorked;
@@ -25,7 +34,8 @@ public class TrainerDto extends EmployeeDto {
 
     public String toString() {
 	StringBuilder stringBuilder = new StringBuilder();
-	stringBuilder.append(super.toString()).append("\nProjects worked: ")
+	stringBuilder.append(super.toString())
+                     .append("\nProjects worked: ")
 		     .append(this.getProjectsWorked());
 
 	return stringBuilder.toString();

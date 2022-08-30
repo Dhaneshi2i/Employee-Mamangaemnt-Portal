@@ -25,8 +25,8 @@ public class Employee {
     @Column(name ="Date_of_Joining")
     private LocalDate dateOfJoining;
 
-    @Column(name = "Deleted", nullable  = false)
-    private boolean deleted = false;
+    @Column(name = "isActiveEmployee", nullable  = false)
+    private boolean isActiveEmployee = false;
 
     public void setName(String name) {
 	this.name = name;
@@ -68,14 +68,14 @@ public class Employee {
 	return dateOfJoining;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setActiveEmployee(boolean isActiveEmployee) {
 
-        this.deleted = deleted;
+        this.isActiveEmployee = isActiveEmployee;
     }
 
-    public boolean getDeleted() {
+    public boolean getActiveEmployee() {
 
-        return deleted;
+        return isActiveEmployee;
     }
 
     public int getAgeFromDateOfBirth() { 

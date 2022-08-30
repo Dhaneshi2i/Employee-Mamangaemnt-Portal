@@ -198,12 +198,12 @@ public class EmployeeConverter {
         TraineeDto traineeDto = null;
        
         for(Employee employee : employees) {
-            if (employee  instanceof Trainer) {  
-                trainerDto  = trainerToTrainerDto((Trainer)employee);
-                employeesDto.add(trainerDto);            
+            if (employee  instanceof Trainee) {  
+                traineeDto  = convertTraineeToTraineeDto((Trainee)employee);
+                employeesDto.add(traineeDto);          
              } else  {
-                traineeDto  = traineeToTraineeDto((Trainee)employee);
-                employeesDto.add(traineeDto);
+                trainerDto  = convertTrainerToTrainerDto((Trainer)employee);
+                employeesDto.add(trainerDto);  
              }
          }
          return employeesDto;
