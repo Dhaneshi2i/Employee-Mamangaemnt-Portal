@@ -9,8 +9,10 @@ package com.ideas2it.employee.dao.impl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -19,9 +21,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.HibernateException; 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ideas2it.employee.dao.IEmployeeDao;
 import com.ideas2it.employee.entity.Employee;
@@ -82,7 +85,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
      *
      * @return {@link List} of {@link T}
      */
-    @Override
+    /*@Override
     public List<T> retriveAllEmployees() {     
 
         List<Employee> employees = new ArrayList<>();
@@ -102,6 +105,26 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             logger.error("",e);
         } 
         return (List<T>)employees;                
+    }*/
+
+    @Override
+    public List<T> retriveAllEmployees() {     
+
+        List<Employee> employees = new ArrayList<>();
+        try (Session session = HibernateUtility.getSession()) {
+            if ( value instanceof Trainee) {
+                TypedQuery query = session.getNamedQuery("get_all_trainees");
+                query.setParameter("isActiveEmployee", false);
+                employees = query.getResultList();
+            } else {
+                TypedQuery query = session.getNamedQuery("get_all_trainers");
+                query.setParameter("isActiveEmployee", false);
+                employees = query.getResultList();
+            }
+        } catch (HibernateException e) {
+            logger.error("",e);
+        } 
+        return (List<T>)employees;                
     }
 
     /**
@@ -114,7 +137,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
      * @return {@link T} the employee object
      * 
      */
-    @Override
+    /*@Override
     public T retriveEmployeeById(String id) {
             
         Employee employee = null;
@@ -149,8 +172,31 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             logger.error("",e);
 	}
 	return (T)employee;
-    }
+    }*/
 
+    @Override
+    public T retriveEmployeeById(String id) {
+            
+        Employee employee = null;
+        try (Session session = HibernateUtility.getSession()) {
+            if (value instanceof Trainee) {
+                TypedQuery query = session.getNamedNativeQuery("get_trainee_by_id");
+                query.setParameter("id", id);
+                query.setParameter("isActiveEmployee",false);
+                List<Trainee> trainee = query.getResultList();
+                employee = trainee.get(0);
+            } else {
+                TypedQuery query = session.getNamedQuery("get_trainer_by_id");
+                query.setParameter("isActiveEmployee", false);
+                query.setParameter("id", id);
+                List<Trainer> trainer = query.getResultList();
+                employee = trainer.get(0);
+            }
+        } catch (HibernateException e) {
+            logger.error("",e);
+	}
+	return (T)employee;
+    }
     /**
      * <p>
      *   Delete employee with his id

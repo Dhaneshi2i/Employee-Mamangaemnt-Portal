@@ -12,10 +12,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "get_all_trainers",
+                query = "from Trainer where isActiveEmployee = :isActiveEmployee"),
+    @NamedQuery(name = "get_trainer_by_id",
+                query = "from Trainer where isActiveEmployee = :isActiveEmployee AND id = :id") })
 public class Trainer extends Employee {
 
     @Id

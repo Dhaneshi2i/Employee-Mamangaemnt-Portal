@@ -2,6 +2,7 @@ package com.ideas2it.employee.entity;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+    @NamedQuery (name = "get_all_trainees",
+                 query = "from Trainee where isActiveEmployee = :isActiveEmployee") })
+
+@NamedNativeQueries({
+    @NamedNativeQuery (name = "get_trainee_by_id",
+                 query = "select from Trainee where id = :id AND isActiveEmployee = :isActiveEmployee") })
 public class Trainee extends Employee {
 
     @Id
