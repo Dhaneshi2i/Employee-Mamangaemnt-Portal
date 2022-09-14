@@ -1,0 +1,103 @@
+2022-09-07 12:30:10 INFO  EmployeeController:49 - 
+Welome to ideas2IT Employee Management Portal !!!
+2022-09-07 12:30:10 INFO  EmployeeController:62 - ********************************************************* 
+
+2022-09-07 12:30:10 INFO  EmployeeController:63 - Enter 1 to Add Employee 
+2022-09-07 12:30:10 INFO  EmployeeController:64 - Enter 2 to Get employee details 
+2022-09-07 12:30:10 INFO  EmployeeController:65 - Enter 3 to Get specific employee details 
+2022-09-07 12:30:10 INFO  EmployeeController:66 - Enter 4 to update employee details 
+2022-09-07 12:30:10 INFO  EmployeeController:67 - Enter 5 to delete a employee 
+2022-09-07 12:30:10 INFO  EmployeeController:68 - Enter 6 to add associates 
+2022-09-07 12:36:29 INFO  EmployeeController:96 - Enter 1 to display trainee details or 2 for trainer details or 3 for Trainee Association details or 4 for Trainer Association details: 
+
+2022-09-07 12:36:31 INFO  EmployeeController:100 - Display Trainee Details
+
+2022-09-07 12:36:31 INFO  Version:46 - HHH000412: Hibernate Core {5.3.28.Final}
+2022-09-07 12:36:31 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2022-09-07 12:36:31 WARN  deprecation:97 - HHH90000012: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/hibernate-configuration. Use namespace http://www.hibernate.org/dtd/hibernate-configuration instead.  Support for obsolete DTD/XSD namespaces may be removed at any time.
+2022-09-07 12:36:31 INFO  Version:49 - HCANN000001: Hibernate Commons Annotations {5.0.5.Final}
+2022-09-07 12:36:32 WARN  pooling:73 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2022-09-07 12:36:32 INFO  pooling:129 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/dhaneshkumar]
+2022-09-07 12:36:32 INFO  pooling:138 - HHH10001001: Connection properties: {user=root, password=****}
+2022-09-07 12:36:32 INFO  pooling:143 - HHH10001003: Autocommit mode: false
+2022-09-07 12:36:32 INFO  DriverManagerConnectionProviderImpl:281 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2022-09-07 12:36:33 INFO  Dialect:161 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2022-09-07 12:36:34 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@18eec010] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2022-09-07 12:36:34 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2022-09-07 12:36:35 INFO  EmployeeController:262 - Name: Dhanesh
+Id: I221
+Age: 21
+Experience: 21
+Reporting person name: nancy
+2022-09-07 12:36:35 INFO  EmployeeController:262 - Name: sanjai
+Id: I222
+Age: 21
+Experience: 21
+Reporting person name: ananu
+2022-09-07 12:36:35 INFO  EmployeeController:195 - Do you want to continue. Type 'yes' or 'no': 
+2022-09-08 18:46:05 INFO  EmployeeController:49 - 
+Welome to ideas2IT Employee Management Portal !!!
+2022-09-08 18:46:05 INFO  EmployeeController:62 - ********************************************************* 
+
+2022-09-08 18:46:05 INFO  EmployeeController:63 - Enter 1 to Add Employee 
+2022-09-08 18:46:05 INFO  EmployeeController:64 - Enter 2 to Get employee details 
+2022-09-08 18:46:05 INFO  EmployeeController:65 - Enter 3 to Get specific employee details 
+2022-09-08 18:46:05 INFO  EmployeeController:66 - Enter 4 to update employee details 
+2022-09-08 18:46:05 INFO  EmployeeController:67 - Enter 5 to delete a employee 
+2022-09-08 18:46:05 INFO  EmployeeController:68 - Enter 6 to add associates 
+2022-09-08 18:46:07 INFO  EmployeeController:72 - Enter 1 to add a trainee or 2 to add a trainer: 
+
+2022-09-08 18:46:09 INFO  EmployeeController:76 - Enter the number of trainees to be created: 
+2022-09-08 18:46:10 INFO  EmployeeController:79 - Enter the trainee 1 details: 
+
+2022-09-08 18:46:10 INFO  EmployeeController:209 - Enter your Name: 
+2022-09-08 18:46:15 INFO  EmployeeController:213 - ID: I221
+2022-09-08 18:46:15 INFO  EmployeeController:215 - Enter your Contact Number: 
+2022-09-08 18:46:17 INFO  EmployeeController:219 - Enter your date of birth in ('dd-MM-yyyy') format: 
+2022-09-12 15:07:48 INFO  EmployeeController:49 - 
+Welome to ideas2IT Employee Management Portal !!!
+2022-09-12 15:07:48 INFO  EmployeeController:62 - ********************************************************* 
+
+2022-09-12 15:07:48 INFO  EmployeeController:63 - Enter 1 to Add Employee 
+2022-09-12 15:07:48 INFO  EmployeeController:64 - Enter 2 to Get employee details 
+2022-09-12 15:07:48 INFO  EmployeeController:65 - Enter 3 to Get specific employee details 
+2022-09-12 15:07:48 INFO  EmployeeController:66 - Enter 4 to update employee details 
+2022-09-12 15:07:48 INFO  EmployeeController:67 - Enter 5 to delete a employee 
+2022-09-12 15:07:48 INFO  EmployeeController:68 - Enter 6 to add associates 
+2022-09-12 15:07:50 INFO  EmployeeController:96 - Enter 1 to display trainee details or 2 for trainer details or 3 for Trainee Association details or 4 for Trainer Association details: 
+
+2022-09-12 15:07:51 INFO  EmployeeController:100 - Display Trainee Details
+
+2022-09-12 15:07:51 INFO  Version:46 - HHH000412: Hibernate Core {5.3.28.Final}
+2022-09-12 15:07:51 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2022-09-12 15:07:51 WARN  deprecation:97 - HHH90000012: Recognized obsolete hibernate namespace http://hibernate.sourceforge.net/hibernate-configuration. Use namespace http://www.hibernate.org/dtd/hibernate-configuration instead.  Support for obsolete DTD/XSD namespaces may be removed at any time.
+2022-09-12 15:07:52 INFO  Version:49 - HCANN000001: Hibernate Commons Annotations {5.0.5.Final}
+2022-09-12 15:07:52 WARN  pooling:73 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2022-09-12 15:07:52 INFO  pooling:129 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/dhaneshkumar]
+2022-09-12 15:07:52 INFO  pooling:138 - HHH10001001: Connection properties: {user=root, password=****}
+2022-09-12 15:07:52 INFO  pooling:143 - HHH10001003: Autocommit mode: false
+2022-09-12 15:07:53 INFO  DriverManagerConnectionProviderImpl:281 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2022-09-12 15:07:54 INFO  Dialect:161 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2022-09-12 15:07:55 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@2ca5f1ed] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+2022-09-12 15:07:56 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2022-09-12 15:07:56 INFO  EmployeeController:262 - Name: null
+Id: I221
+Age: 22
+Experience: 1
+Reporting person name: nancy
+2022-09-12 15:07:56 INFO  EmployeeController:262 - Name: null
+Id: I222
+Age: 22
+Experience: 1
+Reporting person name: nancy
+2022-09-12 15:07:56 INFO  EmployeeController:195 - Do you want to continue. Type 'yes' or 'no': 
+2022-09-12 17:48:44 INFO  EmployeeController:47 - 
+Welcome to ideas2IT Employee Management Portal !!!
+2022-09-12 17:48:44 INFO  EmployeeController:60 - ********************************************************* 
+
+2022-09-12 17:48:44 INFO  EmployeeController:61 - Enter 1 to Add Employee 
+2022-09-12 17:48:44 INFO  EmployeeController:62 - Enter 2 to Get employee details 
+2022-09-12 17:48:44 INFO  EmployeeController:63 - Enter 3 to Get specific employee details 
+2022-09-12 17:48:44 INFO  EmployeeController:64 - Enter 4 to update employee details 
+2022-09-12 17:48:44 INFO  EmployeeController:65 - Enter 5 to delete a employee 
+2022-09-12 17:48:44 INFO  EmployeeController:66 - Enter 6 to add associates 
